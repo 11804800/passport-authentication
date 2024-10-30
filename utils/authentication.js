@@ -8,14 +8,14 @@ const JwtStrategy = require('passport-jwt').Strategy;
 //for passport local strategy
 const LocalStrategy = require('passport-local').Strategy;
 
-const userschema=require('../model/userSchema');
+const userSchema=require('../model/userSchema');
 
 //exporting the local for authenicating
-exports.local=passport.use(new LocalStrategy(userschema.authenticate()));
+exports.local=passport.use(new LocalStrategy(userSchema.authenticate()));
 
 //serializing and deserializing the user
-passport.serializeUser(userschema.serializeUser());
-passport.deserializeUser(userschema.deserializeUser());
+passport.serializeUser(userSchema.serializeUser());
+passport.deserializeUser(userSchema.deserializeUser());
 
 //creating the gettoken method to generate the jwt token
 exports.getToken=function(user)
@@ -33,7 +33,7 @@ opts.secretOrKey="12345-67889-122344-1222"
 
 //it takes opts object and then a callback function with jwt payload and done
 exports.jwtpassport=passport.use(new JwtStrategy(opts,(jwt_payload,done)=>{
-    userschema.findOne({ _id: jwt_payload._id }, (err, user) => {
+    userSchema.findOne({ _id: jwt_payload._id }, (err, user) => {
         if (err){
             return done(err, false);
         }
